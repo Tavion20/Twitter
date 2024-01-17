@@ -36,3 +36,89 @@
     transform: rotate(360deg);
   }
 }
+
+
+
+.profile-card {
+  text-align: center;
+  padding: 20px;
+  background: linear-gradient(#B1B2FF, #B1B2FF 25%, #EEF1FF 50%, #EEF1FF);
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  max-width: 300px; 
+  margin: 0 auto;
+}
+
+.profile-card h2 {
+  margin-bottom: 10px;
+  color: #333333;
+}
+
+.followers-following {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 20px;
+}
+
+.followers, .following {
+  flex-basis: 45%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.followers h4, .following h4 {
+  margin-bottom: 8px;
+  color: #555555;
+}
+
+.followers p, .following p {
+  margin: 0;
+  font-weight: bold;
+  color: #007bff; 
+}
+
+.add-post {
+  background-color: #EEF1FF;
+  border-radius: 20px;
+  width: 676px;
+  height: 250px;
+  display: flex;
+  padding: 20px;
+  justify-content: flex-start;
+  gap: 20px; 
+}
+
+.text-containers {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 15px; 
+}
+
+.text-containers input {
+  width: 100%;
+  padding: 15px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-weight: bold;
+  box-sizing: border-box;
+}
+
+.search-container {
+  padding: 10px;
+  position: relative;
+  max-width: 300px;
+  margin-top: ; 
+  margin-left: 40px;
+}
+
+input[type="text"] {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 15px;
+  box-sizing: border-box;
+  font-size: 16px;
+}
+
