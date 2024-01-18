@@ -1,12 +1,17 @@
 import './App.css';
+import logo from './logo.png'
 import {useState,useEffect} from 'react';
 import { RxAvatar } from "react-icons/rx";
 import { IoIosAddCircleOutline } from "react-icons/io";
 import { AiTwotoneLike } from "react-icons/ai";
 import { CgComment } from "react-icons/cg";
-import Dummy from './dummy.json'
 import { FaUserCircle } from "react-icons/fa";
 import Select from 'react-select'
+import { GiBirdTwitter } from "react-icons/gi";
+import { IoMdSearch } from "react-icons/io";
+import { FaTwitter } from "react-icons/fa";
+
+
 
 function App() {
   const [users,setUsers] = useState([]);
@@ -37,9 +42,18 @@ function App() {
   return (
     
     <div>
-      <div style={{backgroundColor:'#B1B2FF',width:'100%',marginBottom:'1rem'}}>
+      <div style={{backgroundColor:'#B1B2FF',width:'99%',marginBottom:'1rem',display:'flex',padding:'0.5rem',alignItems:'center'}}>
+        <div style={{marginLeft:'1.5rem'}}>
+          <FaTwitter  size={50} color='#EEF1FF' />
+        </div>
+        <div>
+          <img src={logo} style={{width:'9rem',marginLeft:'2rem'}} />
+        </div>
         <div class="search-container">
           <input type="text" placeholder="Search"/>
+          <div style={{marginLeft:'-2.3rem'}}>
+            <IoMdSearch size={30}  />
+          </div>
         </div>
       </div>
       <div style={{display:'flex'}}>
@@ -63,7 +77,7 @@ function App() {
               </div>
             </div>
           </div>
-          <div style={{borderRadius:'20',marginTop:'1rem'}}>
+          <div style={{borderRadius:'20',marginTop:'3rem'}}>
           <div style={{backgroundColor:'#B1B2FF',padding:'1rem',fontWeight:'500',fontSize:24}}>
               Suggestions
             </div>
@@ -94,19 +108,38 @@ function App() {
                 <FaUserCircle size={70} color="#007bff" />
                 <div className="text-containers">
                   <input type="text" placeholder="What's in your mind Peter?" />
-                  <input type="text-area" placeholder="hi" />
+                  <textarea placeholder='Express Yourself....' style={{height:'4.5rem',resize:'none',padding:'0.5rem',fontSize:'18',borderRadius:10,border:'none'}} />
                   <Select
                     closeMenuOnSelect={true}
                     defaultValue={[options[0]]}
                     isMulti
                     options={options}
                   />
+                  <button style={{width:'5rem',marginLeft:'auto',backgroundColor:'#B1B2FF',padding:'0.5rem',border:'none',borderRadius:5,fontSize:18}}>Post</button>
                 </div>
           </div>
-          <div>
+          <div style={{marginTop:'3rem'}}>
             {posts.map((post) => {
               return(
                 <div style={{width:'80%',backgroundColor:'#EEF1FF',borderRadius:20,marginBottom:'1rem',padding:'1.5rem'}}>
+                  {/* <div>
+                    {users.map((user) => {
+                      if (user.id == post.userId){
+                        return(
+                          <div style={{display:'flex',alignItems:'center',columnGap:'1rem',marginBottom:'1rem'}}>
+                            <div>
+                            <img src={user.image} style={{width:'3.5rem',height:'3.5rem'}} />
+                            </div>
+                            <div style={{fontWeight:'300',fontSize:18}}>
+                              {user.firstName} {user.lastName}
+                            </div>
+                            
+                          </div>
+                        )
+                      }
+                    })}
+                  </div> */}
+                  <div style={{padding:'1rem'}}>
                   <div style={{fontWeight:'500',fontSize:24}}>{post.title}</div>
                   <div style={{fontWeight:'300',fontSize:18,padding:'0.5rem'}}>{post.body}</div>
                   <div style={{display:'flex'}}>
@@ -126,6 +159,7 @@ function App() {
                       <div><CgComment size={25} /></div> 
                       <div>Comment</div>
                     </div>
+                  </div>
                   </div>
                 </div>
               )

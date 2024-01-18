@@ -45,7 +45,7 @@
   background: linear-gradient(#B1B2FF, #B1B2FF 25%, #EEF1FF 50%, #EEF1FF);
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  max-width: 300px; 
+  /* max-width: 300px;  */
   margin: 0 auto;
 }
 
@@ -81,7 +81,7 @@
 .add-post {
   background-color: #EEF1FF;
   border-radius: 20px;
-  width: 676px;
+  width: 80%;
   height: 250px;
   display: flex;
   padding: 20px;
@@ -108,9 +108,13 @@
 .search-container {
   padding: 10px;
   position: relative;
-  max-width: 300px;
-  margin-top: ; 
+  width: 25rem;
+  margin-top: 0px; 
   margin-left: 40px;
+  padding-left: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 input[type="text"] {
@@ -121,4 +125,3 @@ input[type="text"] {
   box-sizing: border-box;
   font-size: 16px;
 }
-
