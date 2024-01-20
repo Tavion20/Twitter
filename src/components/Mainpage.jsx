@@ -10,14 +10,28 @@ import Select from 'react-select'
 import { GiBirdTwitter } from "react-icons/gi";
 import { IoMdSearch } from "react-icons/io";
 import { FaTwitter } from "react-icons/fa";
+import { BsSendFill } from "react-icons/bs";
 
 
 
 function Mainpage() {
   const [users,setUsers] = useState([]);
+  const [curruser,setCurruser] = useState([]);
   const [posts,setPosts] = useState([]);
+  const [myposts,setMyposts] = useState([]);
   const [comments,setComments] = useState([]);
   const [postid,setPostid] = useState(false);
+  const [postno,setPostno] = useState(null);
+
+  const [title,setTitle] =useState("")
+  const [body,setBody] =useState("")
+  const [tags,setTags] =useState([])
+  const [newcom,setNewcom] =useState("")
+  const [newc,setNewc] = useState(false)
+
+
+  const [showmypost, setShowmypost] =useState(false)
+
 
   useEffect(() => {
     fetch('https://dummyjson.com/users')
@@ -33,6 +47,13 @@ function Mainpage() {
     .then(console.log);
   }, []);
 
+  useEffect(() => {
+    fetch('https://dummyjson.com/users/5')
+    .then(res => res.json())
+    .then(res => setCurruser(res))
+    .then(console.log);
+  }, []);
+
   const getComment = async (id) => {
     try {
       const response = await fetch(`https://dummyjson.com/posts/${id}/comments`);
@@ -43,10 +64,54 @@ function Mainpage() {
       console.error('Error fetching comments:', error);
     }
   }
+
+  const submitComment = () => {
+    const newComment = {
+        id: comments.length + 1,
+        body: newcom,
+        postId: postno,
+        user: {
+          id: curruser.id,
+          username: curruser.username
+        }
+    }
+    const newcomments = comments.concat(newComment)
+    setComments(newcomments)
+  }
   
+  const addPost = async () => {
+    try {
+        const response = await fetch('https://dummyjson.com/posts/add', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                title: title,
+                userId: curruser.id,
+                body: body,
+                tags: tags,
+                reactions: 0,
+                id: myposts.length + 1
+            })
+        });
+
+        const res = await response.json();
+
+        const newPosts = myposts.concat(res);
+        setMyposts(newPosts)
+        setBody("");
+        setTitle("");
+        setTags([]);
+        console.log(myposts);
+        console.log(posts)
+    } catch (error) {
+        console.error("Error adding post:", error);
+    }
+};
+
 
   const showComment = (id) => {
     setPostid(true)
+    setPostno(id)
     getComment(id)
   }
 
@@ -83,16 +148,19 @@ function Mainpage() {
           
             <div class = "profile-card">
             <div className="profile-picture">
-            <FaUserCircle size={100} color="#007bff" />
+              <div>
+                <img src={curruser.image} style={{width:'3.5rem',height:'3.5rem'}} />
+              </div>
+              <div>{curruser.firstName} {curruser.lastName}</div>
             </div>
               <div class = "followers-following">
                 <div class = "followers">
-                  <h4>Followers</h4>
-                  <p>1000</p>
+                  <h4>Age</h4>
+                  <p>{curruser.age}</p>
                 </div>
                 <div class = "following">
-                  <h4>Following</h4>
-                  <p>500</p>
+                  <h4>Gender</h4>
+                  <p>{curruser.gender}</p>
                 </div>
               </div>
             </div>
@@ -105,7 +173,7 @@ function Mainpage() {
             
             <div style={{marginTop:'1rem'}}>
               {users.map((user) => {
-                return(
+                if (user.id != curruser.id){return(
                   <div style={{display:'flex',alignItems:'center',columnGap:'1rem',marginBottom:'1rem'}}>
                     <div>
                     <img src={user.image} style={{width:'3.5rem',height:'3.5rem'}} />
@@ -116,7 +184,7 @@ function Mainpage() {
                     <div style={{marginLeft:'auto'}}><IoIosAddCircleOutline style={{width:'1.5rem',height:'1.5rem'}} /></div>
                   </div>
                 )
-              })}
+              }})}
             </div>
           </div>
           </div>
@@ -125,23 +193,33 @@ function Mainpage() {
 
         <div style={{flex:7,paddingTop:'3rem'}}>
           <div className="add-post">
-                <FaUserCircle size={70} color="#007bff" />
+              <div>
+                <img src={curruser.image} style={{width:'3.5rem',height:'3.5rem'}} />
+              </div>
                 <div className="text-containers">
-                  <input type="text" placeholder="What's in your mind Peter?" />
-                  <textarea placeholder='Express Yourself....' style={{height:'4.5rem',resize:'none',padding:'0.5rem',fontSize:'18',borderRadius:10,border:'none'}} />
+                  <input value={title} onChange={(e) => setTitle(e.target.value)} type="text" placeholder="What's in your mind?" />
+                  <textarea value={body} onChange={(e) => setBody(e.target.value)} placeholder='Express Yourself....' style={{height:'4.5rem',resize:'none',padding:'0.5rem',fontSize:'18',borderRadius:10,border:'none'}} />
                   <Select
                     closeMenuOnSelect={true}
-                    defaultValue={[options[0]]}
+                    defaultValue={tags}
                     isMulti
                     options={options}
+                    value={tags}
+                    onChange={setTags}
                   />
-                  <button style={{width:'5rem',marginLeft:'auto',backgroundColor:'#B1B2FF',padding:'0.5rem',border:'none',borderRadius:5,fontSize:18}}>Post</button>
+                  <button onClick={() => addPost()} style={{width:'5rem',marginLeft:'auto',backgroundColor:'#B1B2FF',padding:'0.5rem',border:'none',borderRadius:5,fontSize:18}}>Post</button>
                 </div>
           </div>
           <div style={{marginTop:'3rem'}}>
-            {posts.map((post) => {
+            <div style={{display:'flex',alignItems:'center',columnGap:'1.5rem',marginBottom:'1.5rem'}}>
+              <div style={!showmypost ?{borderBottom: '5px solid purple',paddingBottom:'0.5rem',cursor:'pointer'} : {cursor:'pointer'}} onClick={() => setShowmypost(false)}>For You</div>
+              <div style={showmypost ?{borderBottom: '5px solid purple',paddingBottom:'0.5rem',cursor:'pointer'} : {cursor:'pointer'}} onClick={() => setShowmypost(true)}>My Posts</div>
+            </div>
+            {(!showmypost ? posts : myposts).length === 0 ? (
+              <p>No records found </p>
+            ) :(!showmypost ? posts: myposts).map((post) => {
               return(
-                <div style={{width:'80%',backgroundColor:'#EEF1FF',borderRadius:20,marginBottom:'1rem',padding:'1.5rem'}}>
+                <div style={{width:'80%',backgroundColor:'#EEF1FF',borderRadius:20,marginBottom:'1rem',padding:'1.5rem',paddingBottom:0}}>
                   <div>
                     {users.map((user) => {
                       if (user.id == post.userId%30){
@@ -165,7 +243,7 @@ function Mainpage() {
                   <div style={{display:'flex'}}>
                     {post.tags.map((tag) => {
                       return(
-                        <div style={{backgroundColor:'#B1B2FF',padding:'0.5rem',paddingLeft:'1rem',paddingRight:'1rem',marginRight:'1rem',borderRadius:20}}>{tag}</div>
+                        <div style={{backgroundColor:'#B1B2FF',padding:'0.5rem',paddingLeft:'1rem',paddingRight:'1rem',marginRight:'1rem',borderRadius:20}}>{!showmypost ? tag : tag.value}</div>
                       )
                     })}
                   </div>
@@ -182,6 +260,10 @@ function Mainpage() {
                   </div>
                   {postid && 
                   <div style={{marginTop:'2rem'}}>
+                    <div style={{display:'flex',marginBottom:'1rem',alignItems:'center'}}>
+                      <div style={{width:'80%'}}><input value={newcom} onChange={(e) => setNewcom(e.target.value)} type="text" placeholder="What's in your mind Peter?" /></div>
+                      <div onClick={() => submitComment()} style={{marginLeft:'-2rem',backgroundColor:'#B1B2FF',borderRadius:10,padding:'0.5rem'}}><BsSendFill /></div>
+                    </div>
                     {comments.map((comment) => {
                       if(comment.postId == post.id){
                         return(
@@ -191,13 +273,21 @@ function Mainpage() {
                                   users.map((user) => {
                                     if(user.id == comment.user.id%30){
                                       return(
-                                        <img src={user.image} style={{width:'3.5rem',height:'3.5rem'}} />
+                                        <div style={{display:'flex',alignItems:'center',columnGap:'1rem'}}>
+                                          <div>
+                                            <img src={user.image} style={{width:'3.5rem',height:'3.5rem'}} />
+                                          </div>
+                                          <div>
+                                            <div style={{fontWeight:'500'}}>{user.firstName}</div>
+                                            <div style={{color:'gray'}}>{comment.body}</div>
+                                          </div>
+                                        </div>
                                       )
                                     }
                                   })
                                 }
                               </div>
-                              <div style={{backgroundColor:'#B1B2FF',padding:'1rem',borderRadius:10,opacity:'50%'}}>{comment.body}</div>
+                              
                           </div>
                         )
                       }
@@ -207,6 +297,7 @@ function Mainpage() {
                 </div>
               )
             })}
+
           </div>
         </div>
         
