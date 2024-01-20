@@ -77,6 +77,7 @@ function Mainpage() {
     }
     const newcomments = comments.concat(newComment)
     setComments(newcomments)
+    setNewcom("")
   }
   
   const addPost = async () => {
@@ -260,10 +261,10 @@ function Mainpage() {
                   </div>
                   {postid && 
                   <div style={{marginTop:'2rem'}}>
-                    <div style={{display:'flex',marginBottom:'1rem',alignItems:'center'}}>
-                      <div style={{width:'80%'}}><input value={newcom} onChange={(e) => setNewcom(e.target.value)} type="text" placeholder="What's in your mind Peter?" /></div>
+                    {post.id == postno && <div style={{display:'flex',marginBottom:'1rem',alignItems:'center'}}>
+                      <div style={{width:'80%'}}><input value={newcom} onChange={(e) => setNewcom(e.target.value)} type="text" placeholder="What's in your mind?" /></div>
                       <div onClick={() => submitComment()} style={{marginLeft:'-2rem',backgroundColor:'#B1B2FF',borderRadius:10,padding:'0.5rem'}}><BsSendFill /></div>
-                    </div>
+                    </div>}
                     {comments.map((comment) => {
                       if(comment.postId == post.id){
                         return(
