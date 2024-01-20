@@ -11,12 +11,14 @@ import { GiBirdTwitter } from "react-icons/gi";
 import { IoMdSearch } from "react-icons/io";
 import { FaTwitter } from "react-icons/fa";
 import { BsSendFill } from "react-icons/bs";
+import { useNavigate } from "react-router-dom";
 
 
 
-function Mainpage() {
+function Mainpage({curruser,setCurruser}) {
+  const navigate = useNavigate();
   const [users,setUsers] = useState([]);
-  const [curruser,setCurruser] = useState([]);
+  // const [curruser,setCurruser] = useState([]);
   const [posts,setPosts] = useState([]);
   const [myposts,setMyposts] = useState([]);
   const [comments,setComments] = useState([]);
@@ -47,12 +49,12 @@ function Mainpage() {
     .then(console.log);
   }, []);
 
-  useEffect(() => {
-    fetch('https://dummyjson.com/users/5')
-    .then(res => res.json())
-    .then(res => setCurruser(res))
-    .then(console.log);
-  }, []);
+  // useEffect(() => {
+  //   fetch('https://dummyjson.com/users/5')
+  //   .then(res => res.json())
+  //   .then(res => setCurruser(res))
+  //   .then(console.log);
+  // }, []);
 
   const getComment = async (id) => {
     try {
@@ -127,7 +129,7 @@ function Mainpage() {
     
     <div>
       <div>
-        <div style={{backgroundColor:'#B1B2FF',width:'99%',marginBottom:'1rem',display:'flex',padding:'0.5rem',alignItems:'center',position:'fixed',zIndex:5}}>
+        <div style={{backgroundColor:'#B1B2FF',width:'100%',marginBottom:'1rem',display:'flex',padding:'0.5rem',alignItems:'center',position:'fixed',zIndex:5}}>
           <div style={{marginLeft:'1.5rem'}}>
             <FaTwitter  size={50} color='#EEF1FF' />
           </div>
@@ -139,6 +141,9 @@ function Mainpage() {
             <div style={{marginLeft:'-2.3rem'}}>
               <IoMdSearch size={30}  />
             </div>
+          </div>
+          <div style={{marginLeft:'auto'}}>
+            <button onClick={() => navigate('/')} style={{padding:'0.5rem',backgroundColor:'#EEF1FF',border:'none',borderRadius:20}}>Logout</button>
           </div>
         </div>
       </div>
@@ -254,10 +259,10 @@ function Mainpage() {
                       <div><AiTwotoneLike size={25} /></div> 
                       <div>Like</div>
                     </div>
-                    <div onClick={() => showComment(post.id)} style={{display:'flex',cursor:'pointer',backgroundColor:'#B1B2FF',padding:'0.5rem',border:'none',borderRadius:5,fontSize:18,columnGap:10}}>
+                    {!showmypost && <div onClick={() => showComment(post.id)} style={{display:'flex',cursor:'pointer',backgroundColor:'#B1B2FF',padding:'0.5rem',border:'none',borderRadius:5,fontSize:18,columnGap:10}}>
                       <div><CgComment size={25} /></div> 
                       <div>Comment</div>
-                    </div>
+                    </div>}
                   </div>
                   {postid && 
                   <div style={{marginTop:'2rem'}}>

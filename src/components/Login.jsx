@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import '../App.css';
+import { useNavigate } from "react-router-dom";
 
-function Login() {
+function Login({curruser,setCurruser}) {
+  const navigate = useNavigate();
   const [users, setUsers] = useState([]);
   const [posts, setPosts] = useState([]);
+  const [username,setUsername] = useState("")
+  const [password,setPassword] = useState("")
 
   useEffect(() => {
     fetch('https://dummyjson.com/users')
@@ -12,7 +16,17 @@ function Login() {
       .then(console.log);
   }, []);
 
+  const findUser = () => {
+    users.filter((user) => {
+      if(user.username==username && user.password==password){
+        setCurruser(user)
+        navigate("/home");
+      }
+    })
+  }
+
   return (
+    <div style={{display:'flex',justifyContent:'center',alignItems:'center',paddingTop:'5rem'}}>
     <div className="container">
       <div className="form-container sign-in">
         <form action="/signin" method="post">
@@ -21,10 +35,10 @@ function Login() {
             {/* Add Twitter logo here */}
           </div>
           <span>or use your email and password</span>
-          <input type="text" placeholder="Name" name="name" required />
-          <input type="password" placeholder="Password" name="password" required />
+          <input value={username} onChange={(e) => setUsername(e.target.value)} type="text" placeholder="Name" name="name" required />
+          <input value={password} onChange={(e) => setPassword(e.target.value)} type="password" placeholder="Password" name="password" required />
           <a href="#">Forgot Password?</a><br />
-          <button type="submit">Sign In</button>
+          <button onClick={() => findUser()}>Sign In</button>
         </form>
       </div>
       <div className="toggle-container">
@@ -41,6 +55,7 @@ function Login() {
           </div>
         </div>
       </div>
+    </div>
     </div>
   );
 }

@@ -137,7 +137,7 @@ input[type="text"] {
     font-family: 'Montserrat', sans-serif;
 }
 
-body{
+/* body{
     background-color: #c9d6ff;
     background: linear-gradient(to right, #e2e2e2, #c9d6ff);
     display: flex;
@@ -145,7 +145,7 @@ body{
     justify-content: center;
     flex-direction: column;
     height: 100vh;
-}
+} */
 
 .container{
     background-color: #fff;
