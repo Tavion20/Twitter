@@ -33,7 +33,7 @@ function Mainpage({curruser,setCurruser}) {
 
 
   const [showmypost, setShowmypost] =useState(false)
-
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
     fetch('https://dummyjson.com/users')
@@ -125,6 +125,15 @@ function Mainpage({curruser,setCurruser}) {
     { value: 'horror', label: 'Horror' },
     { value: 'sarcasm', label: 'Sarcasm' }
   ]
+
+  const newData = posts
+  .map((post) => {
+    if (search === "" || post.title.toLowerCase().includes(search.toLowerCase())) {
+      return post;
+    }
+    return null;
+  })
+  .filter(Boolean);
   return (
     
     <div>
