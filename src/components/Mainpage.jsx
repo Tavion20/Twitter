@@ -30,6 +30,7 @@ function Mainpage({curruser,setCurruser}) {
   const [tags,setTags] =useState([])
   const [newcom,setNewcom] =useState("")
   const [newc,setNewc] = useState(false)
+  const [friends,setFriends]=useState([])
 
 
   const [showmypost, setShowmypost] =useState(false)
@@ -80,6 +81,12 @@ function Mainpage({curruser,setCurruser}) {
     const newcomments = comments.concat(newComment)
     setComments(newcomments)
     setNewcom("")
+  }
+
+  const updateFriends = (id) => {
+    console.log(id)
+    const newfriends = friends.concat(id)
+    setFriends(newfriends)
   }
   
   const addPost = async () => {
@@ -195,7 +202,7 @@ function Mainpage({curruser,setCurruser}) {
             
             <div style={{marginTop:'1rem'}}>
               {users.map((user) => {
-                if (user.id != curruser.id){return(
+                if (user.id != curruser.id && !(friends.includes(user.id))){return(
                   <div style={{display:'flex',alignItems:'center',columnGap:'1rem',marginBottom:'1rem'}}>
                     <div>
                     <img src={user.image} style={{width:'3.5rem',height:'3.5rem'}} />
@@ -203,7 +210,7 @@ function Mainpage({curruser,setCurruser}) {
                     <div style={{fontWeight:'300',fontSize:18}}>
                       {user.firstName} {user.lastName}
                     </div>
-                    <div style={{marginLeft:'auto'}}><IoIosAddCircleOutline style={{width:'1.5rem',height:'1.5rem'}} /></div>
+                    <div onClick={() => updateFriends(user.id)} style={{marginLeft:'auto'}}><IoIosAddCircleOutline style={{width:'1.5rem',height:'1.5rem'}} /></div>
                   </div>
                 )
               }})}
