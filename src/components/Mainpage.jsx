@@ -134,6 +134,8 @@ function Mainpage({curruser,setCurruser}) {
     return null;
   })
   .filter(Boolean);
+
+
   return (
     
     <div>
@@ -146,7 +148,12 @@ function Mainpage({curruser,setCurruser}) {
             <img src={logo} style={{width:'9rem',marginLeft:'2rem'}} />
           </div>
           <div class="search-container">
-            <input type="text" placeholder="Search"/>
+            <input
+              type="text"
+              placeholder="Search"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
             <div style={{marginLeft:'-2.3rem'}}>
               <IoMdSearch size={30}  />
             </div>
@@ -232,7 +239,7 @@ function Mainpage({curruser,setCurruser}) {
             </div>
             {(!showmypost ? posts : myposts).length === 0 ? (
               <p>No records found </p>
-            ) :(!showmypost ? posts: myposts).map((post) => {
+            ) :(!showmypost ? (search == "" ? (search == "" ? posts : newData) : newData): myposts).map((post) => {
               return(
                 <div style={{width:'80%',backgroundColor:'#EEF1FF',borderRadius:20,marginBottom:'1rem',padding:'1.5rem',paddingBottom:0}}>
                   <div>
