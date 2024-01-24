@@ -16,7 +16,12 @@ import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { setUserID, setViewID } from './redux/actions';
 import { useParams } from 'react-router-dom';
-
+import { FaLocationDot } from "react-icons/fa6";
+import { FaBabyCarriage } from "react-icons/fa";
+import { MdOutlineMail } from "react-icons/md";
+import { FaPhoneAlt } from "react-icons/fa";
+import { FaBuilding } from "react-icons/fa6";
+import { MdBloodtype } from "react-icons/md";
 
 function Mainpage() {
   // const curruser = useSelector((state) => state.user.userID);
@@ -37,7 +42,7 @@ function Mainpage() {
   const [newcom,setNewcom] =useState("")
   const [newc,setNewc] = useState(false)
   const [friends,setFriends]=useState([])
-
+  const suggestions = users.slice(2,8)
   
   const [showmypost, setShowmypost] =useState(false)
   const [search, setSearch] = useState("");
@@ -196,7 +201,7 @@ function Mainpage() {
       </div>
       <div style={{display:'flex',justifyContent:'center',alignItems:'center',paddingTop:'4rem'}}>
 
-        {/* <div style={{flex:3,padding:'3rem',position:'sticky'}}>
+        <div style={{padding:'3rem',position:'fixed',top:65,bottom:0,left:0,width:'30%'}}>
           <div>
           
             <div class = "profile-card">
@@ -219,14 +224,60 @@ function Mainpage() {
             </div>
           </div>
           <div class = "suggestion-box">
-          <div style={{borderRadius:'20',marginTop:'3rem',}}>
-          <div style={{backgroundColor:'#B1B2FF',padding:'1rem',fontWeight:'500',fontSize:24}}>
+          <div style={{borderRadius:20,marginTop:'1rem',backgroundColor:'#EEF1FF',paddingBottom:'2rem',paddingTop:'0.5rem'}}>
+          <div>
+                       
+                        <div style={{display:'flex',columnGap:'1.8rem',marginTop:'2rem',paddingLeft:'2rem'}}>
+                            {/* <div style={{display:'flex',columnGap:'0.7rem',justifyContent:'center',alignItems:'center'}}>
+                                <FaLocationDot />
+                                <div>{curruser.address.city}</div>
+                            </div> */}
+                            <div style={{display:'flex',columnGap:'0.7rem',justifyContent:'center',alignItems:'center'}}>
+                                <MdOutlineMail />
+                                <div>{curruser.email}</div>
+                            </div>
+                        </div>
+                        <div style={{display:'flex',columnGap:'1.8rem',marginTop:'1rem',paddingLeft:'2rem'}}>
+                        <div style={{display:'flex',columnGap:'0.7rem',justifyContent:'center',alignItems:'center'}}>
+                                <FaBabyCarriage />
+                                <div>{curruser.birthDate}</div>
+                            </div>
+                            
+                        </div>
+                        <div style={{display:'flex',columnGap:'1.8rem',marginTop:'1rem',paddingLeft:'2rem'}}>
+                        
+                            
+                            <div style={{display:'flex',columnGap:'0.7rem',justifyContent:'center',alignItems:'center'}}>
+                                <FaPhoneAlt />
+                                <div>{curruser.phone}</div>
+                            </div>
+                        </div>
+                        
+                        <div style={{display:'flex',columnGap:'5rem',marginTop:'1rem',paddingLeft:'2rem'}}>
+                        <div style={{display:'flex',columnGap:'0.7rem',justifyContent:'center',alignItems:'center'}}>
+                                <MdBloodtype />
+                                <div>{curruser.bloodGroup}</div>
+                            </div>
+                            
+                            {/* <div style={{display:'flex',columnGap:'0.7rem',justifyContent:'center',alignItems:'center'}}>
+                                <FaBuilding />
+                                <div>{curruser.company.name}</div>
+                            </div> */}
+                        </div>
+                    </div>
+          </div>
+          </div>
+        </div>
+
+        <div style={{padding:'3rem',position:'fixed',top:65,bottom:0,right:0,width:'30%'}}>
+          <div className='rightsection'>
+        <div style={{backgroundColor:'#B1B2FF',padding:'1rem',fontWeight:'500',fontSize:24,borderRadius:20,paddingBottom:'1.5rem'}}>
               Suggestions
             </div>
-          <div style={{backgroundColor:'#EEF1FF',padding:'1rem'}}>
+          <div style={{backgroundColor:'#EEF1FF',padding:'1rem',marginTop:'-0.8rem',borderBottomLeftRadius:20,borderBottomRightRadius:20}}>
             
             <div style={{marginTop:'1rem'}}>
-              {users.map((user) => {
+              {suggestions.map((user) => {
                 if (user.id != curruser.id && !(friends.includes(user.id))){return(
                   <div style={{display:'flex',alignItems:'center',columnGap:'1rem',marginBottom:'1rem'}}>
                     <div>
@@ -242,12 +293,10 @@ function Mainpage() {
             </div>
           </div>
           </div>
-          </div>
-          </div>
-        </div> */}
+        </div>
 
 
-        <div style={{flex:0.5,paddingTop:'3rem',marginLeft:'2rem'}}>
+        <div style={{flex:0.5,paddingTop:'3rem',marginLeft:'8rem'}}>
           <div className="add-post">
               <div>
                 <img src={curruser.image} style={{width:'3.5rem',height:'3.5rem'}} />
