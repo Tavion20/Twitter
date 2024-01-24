@@ -283,9 +283,9 @@ function Mainpage() {
                     <div>
                     <img src={user.image} style={{width:'3.5rem',height:'3.5rem'}} />
                     </div>
-                    <div style={{fontWeight:'300',fontSize:18}}>
+                    <Link to={`/profile/${user.id}`} style={{fontWeight:'300',fontSize:16,color:'black'}}>
                       {user.firstName} {user.lastName}
-                    </div>
+                    </Link>
                     <div onClick={() => updateFriends(user.id)} style={{marginLeft:'auto'}}><IoIosAddCircleOutline style={{width:'1.5rem',height:'1.5rem'}} /></div>
                   </div>
                 )
