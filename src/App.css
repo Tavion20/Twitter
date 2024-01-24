@@ -345,3 +345,27 @@ input[type="text"]:active{
     transform: translateX(200%);
 }
 
+/* making it responsive */
+@media (max-width: 576px) {
+  .profile-card {
+    display: none;
+  }
+}
+
+@media (max-width: 576px) {
+  .profile-card {
+    display: none;
+  }
+}
+
+@media (max-width: 576px) {
+  .suggestion-box {
+    display: none;
+  }
+}
+
+@media (max-width: 576px) {
+  .twtlogo {
+    display: none;
+  }
+}

@@ -38,11 +38,10 @@ function Mainpage() {
   const [newc,setNewc] = useState(false)
   const [friends,setFriends]=useState([])
 
-
+  
   const [showmypost, setShowmypost] =useState(false)
   const [search, setSearch] = useState("");
 
-  
   useEffect(() => {
     fetch('https://dummyjson.com/users')
     .then(res => res.json())
@@ -173,8 +172,8 @@ function Mainpage() {
     <div>
       <div>
         <div style={{backgroundColor:'#B1B2FF',width:'100%',marginBottom:'1rem',display:'flex',padding:'0.5rem',alignItems:'center',position:'fixed',zIndex:5}}>
-          <div style={{marginLeft:'1.5rem'}}>
-            <FaTwitter  size={50} color='#EEF1FF' />
+          <div class = "twtlogo" style={{marginLeft:'1.5rem'}}>
+            <FaTwitter  size={50} color='#EEF1FF'  />
           </div>
           <div>
             <img src={logo} style={{width:'9rem',marginLeft:'2rem'}} />
@@ -219,7 +218,8 @@ function Mainpage() {
               </div>
             </div>
           </div>
-          <div style={{borderRadius:'20',marginTop:'3rem'}}>
+          <div class = "suggestion-box">
+          <div style={{borderRadius:'20',marginTop:'3rem',}}>
           <div style={{backgroundColor:'#B1B2FF',padding:'1rem',fontWeight:'500',fontSize:24}}>
               Suggestions
             </div>
@@ -240,6 +240,8 @@ function Mainpage() {
                 )
               }})}
             </div>
+          </div>
+          </div>
           </div>
           </div>
         </div> */}
