@@ -11,18 +11,22 @@ import { GiBirdTwitter } from "react-icons/gi";
 import { IoMdSearch } from "react-icons/io";
 import { FaTwitter } from "react-icons/fa";
 import { BsSendFill } from "react-icons/bs";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useSelector } from 'react-redux';
-import { useDispatch } from 'react-redux';
-import { setUserID, setViewID } from './redux/actions';
 import { useParams } from 'react-router-dom';
+import { FaLocationDot } from "react-icons/fa6";
+import { FaBabyCarriage } from "react-icons/fa";
+import { MdOutlineMail } from "react-icons/md";
+import { FaPhoneAlt } from "react-icons/fa";
+import { FaBuilding } from "react-icons/fa6";
+import { MdBloodtype } from "react-icons/md";
 
 
-function Mainpage() {
-  // const curruser = useSelector((state) => state.user.userID);
-  const {userid} = useParams();
+
+function Profile({ match }) {
+  const {curruserid} = useParams();
+  console.log(curruserid)
   const navigate = useNavigate();
-  const dispatch = useDispatch();
   const [users,setUsers] = useState([]);
   const [curruser,setCurruser] = useState([]);
   const [posts,setPosts] = useState([]);
@@ -58,13 +62,13 @@ function Mainpage() {
   }, []);
 
   useEffect(() => {
-    if(userid){
-    fetch(`https://dummyjson.com/users/${userid}`)
+    if(curruserid){
+    fetch('https://dummyjson.com/users/${curruserid}')
     .then(res => res.json())
     .then(res => setCurruser(res))
     .then(console.log);
     }
-  }, [userid]);
+  }, [curruserid]);
 
   const getComment = async (id) => {
     try {
@@ -102,12 +106,6 @@ function Mainpage() {
     console.log(id)
     const newfriends = friends.concat(id)
     setFriends(newfriends)
-  }
-
-  const openProfile = (id) => {
-    console.log(id)
-    dispatch(setViewID(id));
-    navigate('/profile')
   }
   
   const addPost = async () => {
@@ -247,32 +245,63 @@ function Mainpage() {
 
         <div style={{flex:0.5,paddingTop:'3rem',marginLeft:'2rem'}}>
           <div className="add-post">
-              <div>
-                <img src={curruser.image} style={{width:'3.5rem',height:'3.5rem'}} />
-              </div>
-                <div className="text-containers">
-                  <input value={title} onChange={(e) => setTitle(e.target.value)} type="text" placeholder="What's in your mind?" />
-                  <textarea value={body} onChange={(e) => setBody(e.target.value)} placeholder='Express Yourself....' style={{height:'4.5rem',resize:'none',padding:'0.5rem',fontSize:'12',borderRadius:10,border:'none',outline:'none'}} />
-                  <Select
-                    closeMenuOnSelect={true}
-                    defaultValue={tags}
-                    isMulti
-                    options={options}
-                    value={tags}
-                    onChange={setTags}
-                  />
-                  <button onClick={() => addPost()} style={{width:'5rem',marginLeft:'auto',backgroundColor:'#B1B2FF',padding:'0.5rem',border:'none',borderRadius:5,fontSize:18}}>Tweet</button>
-                </div>
+              {users.map((curruser) => {
+                if(curruser.id == curruserid){return(
+                    <div>
+                        <div style={{display:'flex',columnGap:'1rem'}}>
+                            <div>
+                                <img src={curruser.image} style={{width:'3.5rem',height:'3.5rem'}} />
+                            </div>
+                            <div>
+                                <div>{curruser.firstName} {curruser.lastName}</div>
+                                <div style={{fontSize:14,fontWeight:600}}>@{curruser.username}</div>
+                            </div>
+                        </div>
+                        <div style={{display:'flex',columnGap:'1.8rem',marginTop:'2rem',paddingLeft:'2rem'}}>
+                            <div style={{display:'flex',columnGap:'0.7rem',justifyContent:'center',alignItems:'center'}}>
+                                <FaLocationDot />
+                                <div>{curruser.address.city}</div>
+                            </div>
+                            <div style={{display:'flex',columnGap:'0.7rem',justifyContent:'center',alignItems:'center'}}>
+                                <MdOutlineMail />
+                                <div>{curruser.email}</div>
+                            </div>
+                        </div>
+                        <div style={{display:'flex',columnGap:'1.8rem',marginTop:'1rem',paddingLeft:'2rem'}}>
+                        <div style={{display:'flex',columnGap:'0.7rem',justifyContent:'center',alignItems:'center'}}>
+                                <FaBabyCarriage />
+                                <div>{curruser.birthDate}</div>
+                            </div>
+                            
+                            <div style={{display:'flex',columnGap:'0.7rem',justifyContent:'center',alignItems:'center'}}>
+                                <FaPhoneAlt />
+                                <div>{curruser.phone}</div>
+                            </div>
+                        </div>
+                        <div style={{display:'flex',columnGap:'5rem',marginTop:'1rem',paddingLeft:'2rem'}}>
+                        <div style={{display:'flex',columnGap:'0.7rem',justifyContent:'center',alignItems:'center'}}>
+                                <MdBloodtype />
+                                <div>{curruser.bloodGroup}</div>
+                            </div>
+                            
+                            <div style={{display:'flex',columnGap:'0.7rem',justifyContent:'center',alignItems:'center'}}>
+                                <FaBuilding />
+                                <div>{curruser.company.name}</div>
+                            </div>
+                        </div>
+                    </div>
+                )}
+              })}
           </div>
           <div style={{marginTop:'3rem'}}>
             <div style={{display:'flex',alignItems:'center',columnGap:'1.5rem',marginBottom:'1.5rem'}}>
-              <div style={!showmypost ?{borderBottom: '5px solid purple',paddingBottom:'0.5rem',cursor:'pointer'} : {cursor:'pointer'}} onClick={() => setShowmypost(false)}>For You</div>
-              <div style={showmypost ?{borderBottom: '5px solid purple',paddingBottom:'0.5rem',cursor:'pointer'} : {cursor:'pointer'}} onClick={() => setShowmypost(true)}>My Posts</div>
+              <div style={!showmypost ?{borderBottom: '5px solid purple',paddingBottom:'0.5rem',cursor:'pointer'} : {cursor:'pointer'}} onClick={() => setShowmypost(false)}>Posts</div>
+              {/* <div style={showmypost ?{borderBottom: '5px solid purple',paddingBottom:'0.5rem',cursor:'pointer'} : {cursor:'pointer'}} onClick={() => setShowmypost(true)}>My Posts</div> */}
             </div>
             {(!showmypost ? posts : myposts).length === 0 ? (
               <p>No records found </p>
             ) :(!showmypost ? (search == "" ? (search == "" ? posts : newData) : newData): myposts).map((post) => {
-              return(
+              if(post.userId%30 == curruserid){return(
                 <div style={{width:'80%',backgroundColor:'#EEF1FF',borderRadius:20,marginBottom:'1rem',padding:'1.5rem',paddingBottom:0}}>
                   <div>
                     {users.map((user) => {
@@ -282,10 +311,10 @@ function Mainpage() {
                             <div>
                             <img src={user.image} style={{width:'3.5rem',height:'3.5rem'}} />
                             </div>
-                            <div >
-                            <Link to={`/profile/${user.id}`} style={{fontWeight:'400',fontSize:16,color:'black'}}>
+                            <div>
+                            <div style={{fontWeight:'300',fontSize:16}}>
                               {user.firstName} {user.lastName}
-                            </Link>
+                            </div>
                             <div style={{fontWeight:'500',fontSize:14}}>
                               @{user.username}
                             </div>
@@ -353,7 +382,7 @@ function Mainpage() {
                   </div>}
                   </div>
                 </div>
-              )
+              )}
             })}
 
           </div>
@@ -366,4 +395,4 @@ function Mainpage() {
   );
 }
 
-export default Mainpage;
+export default Profile;

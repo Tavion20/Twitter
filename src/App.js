@@ -3,6 +3,7 @@ import {useState,useEffect} from 'react';
 import Mainpage from './components/Mainpage';
 import Login from './components/Login';
 import { HashRouter, Route, Routes } from "react-router-dom";
+import Profile from './components/Profile';
 
 function App() {
   const [users,setUsers] = useState([]);
@@ -33,7 +34,8 @@ function App() {
       <HashRouter basename='/'>
         <Routes>
           <Route path='/' element={<Login curruser={curruser} setCurruser={setCurruser} />} />
-          <Route path='/home' element={<Mainpage curruser={curruser} setCurruser={setCurruser} />} />
+          <Route path='/home/:userid' element={<Mainpage />} />
+          <Route path='/profile/:curruserid' element={<Profile />} />
         </Routes>
       </HashRouter>  
     </div>

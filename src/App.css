@@ -38,7 +38,6 @@
 }
 
 
-
 .profile-card {
   text-align: center;
   padding: 20px;
@@ -120,10 +119,17 @@
 input[type="text"] {
   width: 100%;
   padding: 10px;
-  border: 1px solid #ccc;
+  border: none;
   border-radius: 10px;
   box-sizing: border-box;
   font-size: 16px;
+  outline: none;
+
+}
+
+input[type="text"]:active{
+  border:none;
+  outline: none;
 }
 
 
@@ -338,3 +344,4 @@ input[type="text"] {
 .container.active .toggle-right{
     transform: translateX(200%);
 }
+

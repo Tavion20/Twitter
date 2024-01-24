@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import '../App.css';
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from 'react-redux';
+import { setUserID } from './redux/actions';
 
 function Login({curruser,setCurruser}) {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [users, setUsers] = useState([]);
   const [posts, setPosts] = useState([]);
   const [username,setUsername] = useState("")
@@ -20,7 +23,8 @@ function Login({curruser,setCurruser}) {
     users.filter((user) => {
       if(user.username==username && user.password==password){
         setCurruser(user)
-        navigate("/home");
+        dispatch(setUserID(user));
+        navigate(`/home/${user.id}`);
       }
     })
   }
