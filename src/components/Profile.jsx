@@ -174,7 +174,7 @@ function Profile({ match }) {
           <div style={{marginLeft:'1.5rem'}}>
             <FaTwitter  size={50} color='#EEF1FF' />
           </div>
-          <div>
+          <div class = "twtlogo">
             <img src={logo} style={{width:'9rem',marginLeft:'2rem'}} />
           </div>
           <div class="search-container">
@@ -257,7 +257,7 @@ function Profile({ match }) {
                                 <div style={{fontSize:14,fontWeight:600}}>@{curruser.username}</div>
                             </div>
                         </div>
-                        <div style={{display:'flex',columnGap:'1.8rem',marginTop:'2rem',paddingLeft:'2rem'}}>
+                        <div style={{display:'flex',columnGap:'1.8rem',marginTop:'2rem',paddingLeft:'1rem'}}>
                             <div style={{display:'flex',columnGap:'0.7rem',justifyContent:'center',alignItems:'center'}}>
                                 <FaLocationDot />
                                 <div>{curruser.address.city}</div>
@@ -267,7 +267,7 @@ function Profile({ match }) {
                                 <div>{curruser.email}</div>
                             </div>
                         </div>
-                        <div style={{display:'flex',columnGap:'1.8rem',marginTop:'1rem',paddingLeft:'2rem'}}>
+                        <div style={{display:'flex',columnGap:'1.8rem',marginTop:'1rem',paddingLeft:'1rem'}}>
                         <div style={{display:'flex',columnGap:'0.7rem',justifyContent:'center',alignItems:'center'}}>
                                 <FaBabyCarriage />
                                 <div>{curruser.birthDate}</div>
@@ -278,7 +278,7 @@ function Profile({ match }) {
                                 <div>{curruser.phone}</div>
                             </div>
                         </div>
-                        <div style={{display:'flex',columnGap:'5rem',marginTop:'1rem',paddingLeft:'2rem'}}>
+                        <div style={{display:'flex',columnGap:'5rem',marginTop:'1rem',paddingLeft:'1rem'}}>
                         <div style={{display:'flex',columnGap:'0.7rem',justifyContent:'center',alignItems:'center'}}>
                                 <MdBloodtype />
                                 <div>{curruser.bloodGroup}</div>
@@ -302,7 +302,7 @@ function Profile({ match }) {
               <p>No records found </p>
             ) :(!showmypost ? (search == "" ? (search == "" ? posts : newData) : newData): myposts).map((post) => {
               if(post.userId%30 == curruserid){return(
-                <div style={{width:'80%',backgroundColor:'#EEF1FF',borderRadius:20,marginBottom:'1rem',padding:'1.5rem',paddingBottom:0}}>
+                <div style={{width:'90%',backgroundColor:'#EEF1FF',borderRadius:20,marginBottom:'1rem',padding:'1.5rem',paddingBottom:0}}>
                   <div>
                     {users.map((user) => {
                       if (user.id == post.userId%30){

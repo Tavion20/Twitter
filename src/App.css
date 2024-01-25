@@ -80,7 +80,7 @@
 .add-post {
   background-color: #EEF1FF;
   border-radius: 20px;
-  width: 80%;
+  width: 90%;
   height: 250px;
   display: flex;
   padding: 20px;
@@ -109,7 +109,7 @@
   position: relative;
   width: 25rem;
   margin-top: 0px; 
-  margin-left: 40px;
+  margin-left: 1rem;
   padding-left: 1rem;
   display: flex;
   justify-content: center;
@@ -160,7 +160,7 @@ input[type="text"]:active{
     position: relative;
     overflow: hidden;
     width: 768px;
-    max-width: 100%;
+    max-width: 80%;
     min-height: 480px;
 }
 
@@ -345,8 +345,31 @@ input[type="text"]:active{
     transform: translateX(200%);
 }
 
+.main-postcont{
+  flex:0.5;
+  margin-left: 5.5rem;
+  padding-top: 3rem;
+}
+
+.twbirdlogo{
+  margin-left: 1rem;
+}
+.twbirdlogopc{
+  margin-left: 1rem;
+}
+
+.left-section-mod{
+  background-color: #FFFFFF;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left:0;
+  width: 80%;
+  z-index: 4;
+}
+
 /* making it responsive */
-@media (max-width: 576px) {
+/* @media (max-width: 576px) {
   .profile-card {
     display: none;
   }
@@ -362,7 +385,7 @@ input[type="text"]:active{
   .suggestion-box {
     display: none;
   }
-}
+} */
 
 @media (max-width: 576px) {
   .twtlogo {
@@ -373,5 +396,44 @@ input[type="text"]:active{
 @media (max-width: 576px) {
   .rightsection {
     display: none;
+  }
+  .left-section{
+    display: none;
+  }
+  .right-side{
+    display: none;
+  }
+  .twbirdlogopc{
+    display: none;
+  }
+}
+@media (min-width: 576px) {
+  .twbirdlogo{
+    display: none;
+  }
+}
+
+@media (max-width: 576px) {
+  .toggle-container {
+    display: none;
+  }
+  .form-container{
+    width: 100%;
+  }
+  .main-postcont{
+    flex:1;
+    margin-left: 2rem;
+    padding-top: 3rem;
+  }
+  .search-container {
+    padding: 10px;
+    position: relative;
+    width: 15rem;
+    margin-top: 0px; 
+    margin-left: auto;
+    padding-left: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 }

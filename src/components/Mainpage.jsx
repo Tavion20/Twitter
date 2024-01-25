@@ -43,7 +43,7 @@ function Mainpage() {
   const [newc,setNewc] = useState(false)
   const [friends,setFriends]=useState([])
   const suggestions = users.slice(2,8)
-  
+  const [showside,setShowside] = useState(false)
   const [showmypost, setShowmypost] =useState(false)
   const [search, setSearch] = useState("");
 
@@ -177,10 +177,13 @@ function Mainpage() {
     <div>
       <div>
         <div style={{backgroundColor:'#B1B2FF',width:'100%',marginBottom:'1rem',display:'flex',padding:'0.5rem',alignItems:'center',position:'fixed',zIndex:5}}>
-          <div class = "twtlogo" style={{marginLeft:'1.5rem'}}>
+          <div className='twbirdlogopc'>
             <FaTwitter  size={50} color='#EEF1FF'  />
           </div>
-          <div>
+          <div onClick={() => setShowside(!showside)} className='twbirdlogo'>
+            <FaTwitter  size={50} color='#EEF1FF'  />
+          </div>
+          <div class = "twtlogo">
             <img src={logo} style={{width:'9rem',marginLeft:'2rem'}} />
           </div>
           <div class="search-container">
@@ -200,8 +203,8 @@ function Mainpage() {
         </div>
       </div>
       <div style={{display:'flex',justifyContent:'center',alignItems:'center',paddingTop:'4rem'}}>
-
-        <div style={{padding:'3rem',position:'fixed',top:65,bottom:0,left:0,width:'30%'}}>
+        <div className={showside ?'left-section-mod':'left-section'}>
+        <div style={showside?{padding:'3rem',width:'100%',marginTop:'4.2rem'}:{padding:'3rem',marginTop:'4.2rem',position:'fixed',top:0,bottom:0,left:0,width:'30%'}}>
           <div>
           
             <div class = "profile-card">
@@ -267,9 +270,11 @@ function Mainpage() {
                     </div>
           </div>
           </div>
+          </div>
         </div>
 
-        <div style={{padding:'3rem',position:'fixed',top:65,bottom:0,right:0,width:'30%'}}>
+        <div className='right-side'>
+        <div style={{padding:'3rem',position:'fixed',top:65,bottom:0,right:0,width:'30%',paddingLeft:'4rem'}}>
           <div className='rightsection'>
         <div style={{backgroundColor:'#B1B2FF',padding:'1rem',fontWeight:'500',fontSize:24,borderRadius:20,paddingBottom:'1.5rem'}}>
               Suggestions
@@ -294,9 +299,9 @@ function Mainpage() {
           </div>
           </div>
         </div>
+        </div>
 
-
-        <div style={{flex:0.5,paddingTop:'3rem',marginLeft:'8rem'}}>
+        <div className='main-postcont'>
           <div className="add-post">
               <div>
                 <img src={curruser.image} style={{width:'3.5rem',height:'3.5rem'}} />
@@ -324,7 +329,7 @@ function Mainpage() {
               <p>No records found </p>
             ) :(!showmypost ? (search == "" ? (search == "" ? posts : newData) : newData): myposts).map((post) => {
               return(
-                <div style={{width:'80%',backgroundColor:'#EEF1FF',borderRadius:20,marginBottom:'1rem',padding:'1.5rem',paddingBottom:0}}>
+                <div style={{width:'90%',backgroundColor:'#EEF1FF',borderRadius:20,marginBottom:'1rem',padding:'1.5rem',paddingBottom:0}}>
                   <div>
                     {users.map((user) => {
                       if (user.id == post.userId%30){

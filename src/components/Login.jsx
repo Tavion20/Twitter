@@ -38,7 +38,7 @@ function Login({curruser,setCurruser}) {
           <div className="social-icons">
             {/* Add Twitter logo here */}
           </div>
-          <span>or use your email and password</span>
+          {/* <span>or use your email and password</span> */}
           <input value={username} onChange={(e) => setUsername(e.target.value)} type="text" placeholder="Name" name="name" required />
           <input value={password} onChange={(e) => setPassword(e.target.value)} type="password" placeholder="Password" name="password" required />
           <a href="#">Forgot Password?</a><br />
