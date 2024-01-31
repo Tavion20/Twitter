@@ -3,6 +3,7 @@ import '../App.css';
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from 'react-redux';
 import { setUserId } from './redux/userReducer';
+import { getMyPosts } from './redux/postReducer';
 
 function Login({curruser,setCurruser}) {
   const navigate = useNavigate();
@@ -24,6 +25,7 @@ function Login({curruser,setCurruser}) {
       if(user.username==username && user.password==password){
         setCurruser(user)
         dispatch(setUserId(user.id));
+        dispatch(getMyPosts(user.id));
         navigate(`/home/${user.id}`);
       }
     })

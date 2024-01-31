@@ -22,22 +22,24 @@ import { MdOutlineMail } from "react-icons/md";
 import { FaPhoneAlt } from "react-icons/fa";
 import { FaBuilding } from "react-icons/fa6";
 import { MdBloodtype } from "react-icons/md";
-import { addPost } from './redux/postReducer';
+import { addMyPost, addPost } from './redux/postReducer';
 import { getPosts } from './redux/postReducer';
+import { IoMdLogOut } from "react-icons/io";
 
 
 
 function Mainpage() {
   const userid = useSelector((state) => state.user.userID);
-  const postsredux = useSelector((state) => state.posts.posts);
+  const posts = useSelector((state) => state.posts.posts);
+  const myposts = useSelector((state) => state.posts.myposts);
   console.log(userid);
   // const {userid} = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [users,setUsers] = useState([]);
   const [curruser,setCurruser] = useState([]);
-  const [posts,setPosts] = useState([]);
-  const [myposts,setMyposts] = useState(postsredux);
+  // const [posts,setPosts] = useState(postsredux);
+  // const [myposts,setMyposts] = useState(mypostsredux);
   const [comments,setComments] = useState([]);
   const [postid,setPostid] = useState(false);
   const [postno,setPostno] = useState(null);
@@ -151,14 +153,14 @@ function Mainpage() {
         });
 
         const res = await response.json();
+        dispatch(addMyPost(res))
 
-        const newPosts = myposts.concat(res);
-        setMyposts(newPosts)
+        // const newPosts = myposts.concat(res);
+        // setMyposts(newPosts)
         setBody("");
         setTitle("");
         setTags([]);
-        console.log(myposts);
-        console.log(posts)
+        
     } catch (error) {
         console.error("Error adding post:", error);
     }
@@ -215,7 +217,7 @@ function Mainpage() {
             </div>
           </div>
           <div style={{marginLeft:'auto'}}>
-            <button onClick={() => navigate('/')} style={{padding:'0.5rem',backgroundColor:'#EEF1FF',border:'none',borderRadius:20}}>Logout</button>
+            <button onClick={() => navigate('/')} style={{padding:'0.5rem',backgroundColor:'#EEF1FF',border:'none',borderRadius:20}}><IoMdLogOut /></button>
           </div>
         </div>
       </div>
@@ -374,7 +376,7 @@ function Mainpage() {
                   <div style={{display:'flex'}}>
                     {post.tags.map((tag) => {
                       return(
-                        <div style={{backgroundColor:'#B1B2FF',padding:'0.5rem',paddingLeft:'1rem',paddingRight:'1rem',marginRight:'1rem',borderRadius:20,fontSize:12}}>{!showmypost ? tag : tag.value}</div>
+                        <div style={{backgroundColor:'#B1B2FF',padding:'0.5rem',paddingLeft:'1rem',paddingRight:'1rem',marginRight:'1rem',borderRadius:20,fontSize:12}}>{!showmypost ? tag : tag.value || tag}</div>
                       )
                     })}
                   </div>

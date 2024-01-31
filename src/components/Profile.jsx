@@ -20,6 +20,7 @@ import { MdOutlineMail } from "react-icons/md";
 import { FaPhoneAlt } from "react-icons/fa";
 import { FaBuilding } from "react-icons/fa6";
 import { MdBloodtype } from "react-icons/md";
+import { IoMdLogOut } from "react-icons/io";
 
 
 
@@ -189,7 +190,7 @@ function Profile({ match }) {
             </div>
           </div>
           <div style={{marginLeft:'auto'}}>
-            <button onClick={() => navigate('/')} style={{padding:'0.5rem',backgroundColor:'#EEF1FF',border:'none',borderRadius:20}}>Logout</button>
+            <button onClick={() => navigate('/')} style={{padding:'0.5rem',backgroundColor:'#EEF1FF',border:'none',borderRadius:20}}><IoMdLogOut /></button>
           </div>
         </div>
       </div>

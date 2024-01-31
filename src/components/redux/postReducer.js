@@ -6,6 +6,16 @@ export const getPosts = createAsyncThunk('posts/getPosts',
     () => {
         return fetch(url)
         .then((res) => res.json())
+        .then((res) => res.posts)
+        .catch((err) => console.log(err));
+    }
+);
+
+export const getMyPosts = createAsyncThunk('posts/getMyPosts', 
+    (id) => {
+        return fetch(`https://dummyjson.com/posts/user/${id}`)
+        .then((res) => res.json())
+        .then((res) => res.posts)
         .catch((err) => console.log(err));
     }
 );
@@ -20,7 +30,7 @@ const postReducer = createSlice({
   initialState,
   reducers: {
     addMyPost: (state, action) => {
-        state.myposts = state.myposts.push(action.payload)
+        state.myposts = state.myposts.concat(action.payload)
     },
     addPost: (state, action) => {
         state.posts = action.payload
@@ -29,7 +39,10 @@ const postReducer = createSlice({
   extraReducers: (builder) => {
     builder.addCase(getPosts.fulfilled , (state,action) => {
         state.posts = action.payload;
-    })
+    });
+    builder.addCase(getMyPosts.fulfilled , (state,action) => {
+        state.myposts = action.payload;
+    });
   }
 });
 
