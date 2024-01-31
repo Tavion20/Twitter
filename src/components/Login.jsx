@@ -1,67 +1,92 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import '../App.css';
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { setUserId } from './redux/userReducer';
 import { getMyPosts } from './redux/postReducer';
 
-function Login({curruser,setCurruser}) {
+function Login({ setCurruser }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [users, setUsers] = useState([]);
-  const [posts, setPosts] = useState([]);
-  const [username,setUsername] = useState("")
-  const [password,setPassword] = useState("")
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [loginStatus, setLoginStatus] = useState(null);
 
-  useEffect(() => {
-    fetch('https://dummyjson.com/users')
-      .then(res => res.json())
-      .then(res => setUsers(res.users))
-      .then(console.log);
-  }, []);
+  const handleLogin = async () => {
+    try {
+      const response = await fetch('https://dummyjson.com/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username,
+          password,
+        }),
+      });
 
-  const findUser = () => {
-    users.filter((user) => {
-      if(user.username==username && user.password==password){
-        setCurruser(user)
-        dispatch(setUserId(user.id));
-        dispatch(getMyPosts(user.id));
-        navigate(`/home/${user.id}`);
+      if (!response.ok) {
+        setLoginStatus('Invalid credentials. Please try again.');
+        throw new Error('Login failed');
       }
-    })
-  }
+
+      const data = await response.json();
+      const token = data.token;
+
+      localStorage.setItem('token', token);
+
+      console.log('Login successful');
+      console.log('Token:', token);
+
+      
+      const userResponse = await fetch('https://dummyjson.com/users', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!userResponse.ok) {
+        throw new Error('Failed to fetch user details');
+      }
+
+      const user = await userResponse.json();
+      setCurruser(user); 
+      dispatch(setUserId(user));
+      dispatch(getMyPosts(user.id));
+      navigate(`/home/${user.id}`);
+    } catch (error) {
+      console.error('Login failed', error);
+    }
+  };
 
   return (
-    <div style={{display:'flex',justifyContent:'center',alignItems:'center',paddingTop:'5rem'}}>
-    <div className="container">
-      <div className="form-container sign-in">
-        <form action="/signin" method="post">
-          <h1>Sign In</h1>
-          <div className="social-icons">
-            {/* Add Twitter logo here */}
-          </div>
-          {/* <span>or use your email and password</span> */}
-          <input value={username} onChange={(e) => setUsername(e.target.value)} type="text" placeholder="Name" name="name" required />
-          <input value={password} onChange={(e) => setPassword(e.target.value)} type="password" placeholder="Password" name="password" required />
-          <a href="#">Forgot Password?</a><br />
-          <button onClick={() => findUser()}>Sign In</button>
-        </form>
-      </div>
-      <div className="toggle-container">
-        <div className="toggle">
-          <div className="toggle-panel toggle-left">
-            <h1>Welcome Back!</h1>
-            <p>Enter your personal details to use all of the site features</p>
-            <button className="hidden" id="login">Sign In</button>
-          </div>
-          <div className="toggle-panel toggle-right">
-            <h1>Hello, Friend!</h1>
-            <p>Register with your personal details to use all of the site features</p>
-            <button className="hidden" id="register">Sign Up</button>
+    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', paddingTop: '5rem' }}>
+      <div className="container">
+        <div className="form-container sign-in">
+          <form>
+            <h1>Sign In</h1>
+            <input value={username} onChange={(e) => setUsername(e.target.value)} type="text" placeholder="Username" name="username" required />
+            <input value={password} onChange={(e) => setPassword(e.target.value)} type="password" placeholder="Password" name="password" required />
+            <a href="#">Forgot Password?</a>
+            <br />
+            <button type="button" onClick={handleLogin}>Sign In</button>
+            {loginStatus && <p style={{ color: 'red' }}>{loginStatus}</p>}
+          </form>
+        </div>
+        <div className="toggle-container">
+          <div className="toggle">
+            <div className="toggle-panel toggle-left">
+              <h1>Welcome Back!</h1>
+              <p>Enter your personal details to use all of the site features</p>
+              <button className="hidden" id="login">Sign In</button>
+            </div>
+            <div className="toggle-panel toggle-right">
+              <h1>Hello, Friend!</h1>
+              <p>Register with your personal details to use all of the site features</p>
+            </div>
           </div>
         </div>
       </div>
-    </div>
     </div>
   );
 }
