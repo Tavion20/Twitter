@@ -22,16 +22,22 @@ import { MdOutlineMail } from "react-icons/md";
 import { FaPhoneAlt } from "react-icons/fa";
 import { FaBuilding } from "react-icons/fa6";
 import { MdBloodtype } from "react-icons/md";
+import { addPost } from './redux/postReducer';
+import { getPosts } from './redux/postReducer';
+
+
 
 function Mainpage() {
-  // const curruser = useSelector((state) => state.user.userID);
-  const {userid} = useParams();
+  const userid = useSelector((state) => state.user.userID);
+  const postsredux = useSelector((state) => state.posts.posts);
+  console.log(userid);
+  // const {userid} = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [users,setUsers] = useState([]);
   const [curruser,setCurruser] = useState([]);
   const [posts,setPosts] = useState([]);
-  const [myposts,setMyposts] = useState([]);
+  const [myposts,setMyposts] = useState(postsredux);
   const [comments,setComments] = useState([]);
   const [postid,setPostid] = useState(false);
   const [postno,setPostno] = useState(null);
@@ -54,12 +60,23 @@ function Mainpage() {
     .then(console.log);
   }, []);
 
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const response = await fetch('https://dummyjson.com/posts');
+  //       const data = await response.json();
+  //       dispatch(addPost(data.posts));
+  //       console.log(data);
+  //     } catch (error) {
+  //       console.error('Error fetching data:', error);
+  //     }
+  //   };
+  
+  //   fetchData();
+  // }, []);
   useEffect(() => {
-    fetch('https://dummyjson.com/posts')
-    .then(res => res.json())
-    .then(res => setPosts(res.posts))
-    .then(console.log);
-  }, []);
+    dispatch(getPosts())
+  },[]);
 
   useEffect(() => {
     if(userid){
