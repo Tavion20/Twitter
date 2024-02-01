@@ -11,8 +11,9 @@ import { GiBirdTwitter } from "react-icons/gi";
 import { IoMdSearch } from "react-icons/io";
 import { FaTwitter } from "react-icons/fa";
 import { BsSendFill } from "react-icons/bs";
-import { useNavigate } from "react-router-dom";
+import { Link,useNavigate } from "react-router-dom";
 import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { FaLocationDot } from "react-icons/fa6";
 import { FaBabyCarriage } from "react-icons/fa";
@@ -21,18 +22,28 @@ import { FaPhoneAlt } from "react-icons/fa";
 import { FaBuilding } from "react-icons/fa6";
 import { MdBloodtype } from "react-icons/md";
 import { IoMdLogOut } from "react-icons/io";
-
+import { addMyPost, addPost, likePost } from './redux/postReducer';
+import { getPosts } from './redux/postReducer';
+import { addComment, getComments } from './redux/commentReducer';
 
 
 function Profile({ match }) {
+  const userid = useSelector((state) => state.user.userID);
+  const dispatch = useDispatch();
   const {curruserid} = useParams();
   console.log(curruserid)
+  const posts = useSelector((state) => state.posts.posts);
+  const comms = useSelector((state) => state.comments.comments);
+  const mycomms = useSelector((state) => state.comments.mycomments);
+  const myposts = useSelector((state) => state.posts.myposts);
+  const comments = comms.concat(mycomms);
   const navigate = useNavigate();
   const [users,setUsers] = useState([]);
   const [curruser,setCurruser] = useState([]);
-  const [posts,setPosts] = useState([]);
-  const [myposts,setMyposts] = useState([]);
-  const [comments,setComments] = useState([]);
+  const [curuser,setCuruser] = useState([]);
+  // const [posts,setPosts] = useState([]);
+  // const [myposts,setMyposts] = useState([]);
+  // const [comments,setComments] = useState([]);
   const [postid,setPostid] = useState(false);
   const [postno,setPostno] = useState(null);
   const [like,setLike] = useState(0);
@@ -55,12 +66,12 @@ function Profile({ match }) {
     .then(console.log);
   }, []);
 
-  useEffect(() => {
-    fetch('https://dummyjson.com/posts')
-    .then(res => res.json())
-    .then(res => setPosts(res.posts))
-    .then(console.log);
-  }, []);
+  // useEffect(() => {
+  //   fetch('https://dummyjson.com/posts')
+  //   .then(res => res.json())
+  //   .then(res => setPosts(res.posts))
+  //   .then(console.log);
+  // }, []);
 
   useEffect(() => {
     if(curruserid){
@@ -71,83 +82,98 @@ function Profile({ match }) {
     }
   }, [curruserid]);
 
-  const getComment = async (id) => {
-    try {
-      const response = await fetch(`https://dummyjson.com/posts/${id}/comments`);
-      const data = await response.json();
-      setComments(data.comments);
-      console.log(data);
-    } catch (error) {
-      console.error('Error fetching comments:', error);
+  useEffect(() => {
+    if(userid){
+    fetch(`https://dummyjson.com/users/${userid}`)
+    .then(res => res.json())
+    .then(res => setCuruser(res))
+    .then(console.log);
+    }
+  }, [userid]);
+
+  // const getComment = async (id) => {
+  //   try {
+  //     const response = await fetch(`https://dummyjson.com/posts/${id}/comments`);
+  //     const data = await response.json();
+  //     setComments(data.comments);
+  //     console.log(data);
+  //   } catch (error) {
+  //     console.error('Error fetching comments:', error);
+  //   }
+  // }
+  useEffect(() => {
+    dispatch(getPosts())
+    dispatch(getComments())
+  },[]);
+
+  const likePostfunc = (id) => {
+    if(like.includes(id)==false){
+      dispatch(likePost(id))
+      like.push(id)
     }
   }
 
-  const likePost = () => {
-    if(like==0){
-      setLike(1)
-    }
-  }
-
-  const submitComment = () => {
+  const submitComment = (postid) => {
     const newComment = {
         id: comments.length + 1,
         body: newcom,
-        postId: postno,
+        postId: postid,
         user: {
-          id: curruser.id,
-          username: curruser.username
+          id: curuser.id,
+          username: curuser.username
         }
     }
-    const newcomments = comments.concat(newComment)
-    setComments(newcomments)
+    // const newcomments = comments.concat(newComment)
+    // setComments(newcomments)
+    dispatch(addComment(newComment))
     setNewcom("")
   }
 
-  const updateFriends = (id) => {
-    console.log(id)
-    const newfriends = friends.concat(id)
-    setFriends(newfriends)
-  }
+//   const updateFriends = (id) => {
+//     console.log(id)
+//     const newfriends = friends.concat(id)
+//     setFriends(newfriends)
+//   }
   
-  const addPost = async () => {
-    if(title =="" ||body == "" ||tags==null)
-    {
-      return "not complete"
-    }
-    try {
-        const response = await fetch('https://dummyjson.com/posts/add', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                title: title,
-                userId: curruser.id,
-                body: body,
-                tags: tags,
-                reactions: 0,
-                id: myposts.length + 1
-            })
-        });
+//   const addPost = async () => {
+//     if(title =="" ||body == "" ||tags==null)
+//     {
+//       return "not complete"
+//     }
+//     try {
+//         const response = await fetch('https://dummyjson.com/posts/add', {
+//             method: 'POST',
+//             headers: { 'Content-Type': 'application/json' },
+//             body: JSON.stringify({
+//                 title: title,
+//                 userId: curruser.id,
+//                 body: body,
+//                 tags: tags,
+//                 reactions: 0,
+//                 id: myposts.length + 1
+//             })
+//         });
 
-        const res = await response.json();
+//         const res = await response.json();
 
-        const newPosts = myposts.concat(res);
-        setMyposts(newPosts)
-        setBody("");
-        setTitle("");
-        setTags([]);
-        console.log(myposts);
-        console.log(posts)
-    } catch (error) {
-        console.error("Error adding post:", error);
-    }
-};
+//         const newPosts = myposts.concat(res);
+//         setMyposts(newPosts)
+//         setBody("");
+//         setTitle("");
+//         setTags([]);
+//         console.log(myposts);
+//         console.log(posts)
+//     } catch (error) {
+//         console.error("Error adding post:", error);
+//     }
+// };
 
 
-  const showComment = (id) => {
-    setPostid(true)
-    setPostno(id)
-    getComment(id)
-  }
+  // const showComment = (id) => {
+  //   setPostid(true)
+  //   setPostno(id)
+  //   getComment(id)
+  // }
 
   const options = [
     { value: 'history', label: 'History' },
@@ -170,10 +196,13 @@ function Profile({ match }) {
   return (
     
     <div>
-      <div>
-        <div style={{backgroundColor:'#B1B2FF',width:'100%',marginBottom:'1rem',display:'flex',padding:'0.5rem',alignItems:'center',position:'fixed',zIndex:5}}>
-          <div style={{marginLeft:'1.5rem'}}>
-            <FaTwitter  size={50} color='#EEF1FF' />
+      <div style={{position:'fixed',zIndex:5,top:0,left:0,right:0}}>
+        <div style={{backgroundImage:'linear-gradient(120deg, #667eea 0%, #764ba2 100%)',width:'100%',marginBottom:'0rem',display:'flex',padding:'0.5rem',alignItems:'center'}}>
+          <div className='twbirdlogopc'>
+            <FaTwitter  size={50} color='#EEF1FF'  />
+          </div>
+          <div className='twbirdlogo'>
+            <FaTwitter  size={50} color='#EEF1FF'  />
           </div>
           <div class = "twtlogo">
             <img src={logo} style={{width:'9rem',marginLeft:'2rem'}} />
@@ -181,6 +210,7 @@ function Profile({ match }) {
           <div class="search-container">
             <input
               type="text"
+              style={{borderRadius:30}}
               placeholder="Search"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
@@ -190,9 +220,13 @@ function Profile({ match }) {
             </div>
           </div>
           <div style={{marginLeft:'auto'}}>
-            <button onClick={() => navigate('/')} style={{padding:'0.5rem',backgroundColor:'#EEF1FF',border:'none',borderRadius:20}}><IoMdLogOut /></button>
+            <button onClick={() => navigate('/')} style={{padding:'0.75rem',backgroundColor:'#EEF1FF',border:'none',borderRadius:20,cursor:'pointer'}}><IoMdLogOut /></button>
           </div>
         </div>
+        {/* <div style={{display:'flex',justifyContent:'center'}}>
+          <hr style={{width:'90%'}}></hr>
+        </div> */}
+        
       </div>
       <div style={{display:'flex',justifyContent:'center',alignItems:'center',paddingTop:'4rem'}}>
 
@@ -303,20 +337,20 @@ function Profile({ match }) {
               <p>No records found </p>
             ) :(!showmypost ? (search == "" ? (search == "" ? posts : newData) : newData): myposts).map((post) => {
               if(post.userId%30 == curruserid){return(
-                <div style={{width:'90%',backgroundColor:'#EEF1FF',borderRadius:20,marginBottom:'1rem',padding:'1.5rem',paddingBottom:0}}>
+                <div style={{width:'100%',backgroundColor:'#EEF1FF',borderRadius:10,marginBottom:'1rem',padding:'1.5rem',paddingBottom:0}}>
                   <div>
                     {users.map((user) => {
                       if (user.id == post.userId%30){
                         return(
-                          <div style={{display:'flex',alignItems:'center',columnGap:'1rem',marginBottom:'1rem'}}>
+                          <div style={{display:'flex',alignItems:'center',columnGap:'1rem',marginBottom:'0rem'}}>
                             <div>
-                            <img src={user.image} style={{width:'3.5rem',height:'3.5rem'}} />
+                            <img src={user.image} style={{width:'2.5rem',height:'2.5rem'}} />
                             </div>
-                            <div>
-                            <div style={{fontWeight:'300',fontSize:16}}>
+                            <div >
+                            <Link to={`/profile/${user.id}`} style={{fontWeight:'400',fontSize:14,color:'black'}}>
                               {user.firstName} {user.lastName}
-                            </div>
-                            <div style={{fontWeight:'500',fontSize:14}}>
+                            </Link>
+                            <div style={{fontWeight:'500',fontSize:10}}>
                               @{user.username}
                             </div>
                             </div>
@@ -326,36 +360,35 @@ function Profile({ match }) {
                     })}
                   </div>
                   <div style={{padding:'1rem'}}>
-                  <div style={{fontWeight:'500',fontSize:16}}>{post.title}</div>
-                  <div style={{fontWeight:'300',fontSize:14,padding:'0.5rem'}}>{post.body}</div>
+                  <div style={{fontWeight:'500',fontSize:14}}>{post.title}</div>
+                  <div style={{fontWeight:'400',fontSize:12,padding:'0.5rem'}}>{post.body}</div>
                   <div style={{display:'flex'}}>
                     {post.tags.map((tag) => {
                       return(
-                        <div style={{backgroundColor:'#B1B2FF',padding:'0.5rem',paddingLeft:'1rem',paddingRight:'1rem',marginRight:'1rem',borderRadius:20,fontSize:12}}>{!showmypost ? tag : tag.value}</div>
+                        <div style={{backgroundColor:'#B1B2FF',padding:'0.5rem',paddingLeft:'1rem',paddingRight:'1rem',marginRight:'1rem',borderRadius:20,fontSize:12}}>{!showmypost ? tag : tag.value || tag}</div>
                       )
                     })}
                   </div>
-                  <div style={{fontWeight:'300',fontSize:10,padding:'0.5rem'}}>{post.reactions + like} likes</div>
-                  <div style={{display:'flex',columnGap:20}}>
-                    <div onClick={() => likePost()} style={{display:'flex',justifyContent:'center',alignItems:'center',backgroundColor:'#B1B2FF',padding:'0.5rem',border:'none',borderRadius:5,fontSize:12,columnGap:5}}>
+                  <div style={{display:'flex',cursor:'pointer'}}>
+                    <div onClick={() => likePostfunc(post.id)} style={{display:'flex',justifyContent:'center',alignItems:'center',padding:'0.5rem',border:'none',borderRadius:5,fontSize:12,columnGap:5}}>
                       <div><AiTwotoneLike size={20} /></div> 
-                      <div>Like</div>
+                      <div style={{fontWeight:'400',fontSize:11,padding:'0.2rem'}}>{post.reactions} likes</div>
                     </div>
-                    {!showmypost && <div onClick={() => showComment(post.id)} style={{display:'flex',justifyContent:'center',alignItems:'center',cursor:'pointer',backgroundColor:'#B1B2FF',padding:'0.5rem',border:'none',borderRadius:5,fontSize:12,columnGap:10}}>
+                    {!showmypost && <div onClick={() => setPostid(post.id)} style={{display:'flex',justifyContent:'center',alignItems:'center',cursor:'pointer',padding:'0.5rem',border:'none',borderRadius:5,fontSize:12,columnGap:10}}>
                       <div><CgComment size={20} /></div> 
                       <div>Comment</div>
                     </div>}
                   </div>
-                  {postid && 
-                  <div style={{marginTop:'2rem'}}>
-                    {post.id == postno && <div style={{display:'flex',marginBottom:'1rem',alignItems:'center'}}>
+                  {postid == post.id && 
+                  <div >
+                    <div style={{display:'flex',marginBottom:'1rem',alignItems:'center'}}>
                       <div style={{width:'80%'}}><input value={newcom} onChange={(e) => setNewcom(e.target.value)} type="text" placeholder="What's in your mind?" /></div>
-                      <div onClick={() => submitComment()} style={{marginLeft:'-2rem',backgroundColor:'#B1B2FF',borderRadius:10,padding:'0.5rem'}}><BsSendFill /></div>
-                    </div>}
+                      <div onClick={() => submitComment(post.id)} style={{marginLeft:'-2rem',borderRadius:10,padding:'0.5rem',cursor:'pointer'}}><BsSendFill /></div>
+                    </div>
                     {comments.map((comment) => {
                       if(comment.postId == post.id){
                         return(
-                          <div style={{display:'flex',columnGap:'1rem',marginBottom:'1rem'}}>
+                          <div style={{display:'flex',columnGap:'1rem',marginBottom:'0.5rem'}}>
                               <div>
                                 {
                                   users.map((user) => {
@@ -363,11 +396,11 @@ function Profile({ match }) {
                                       return(
                                         <div style={{display:'flex',alignItems:'center',columnGap:'1rem'}}>
                                           <div>
-                                            <img src={user.image} style={{width:'3.5rem',height:'3.5rem'}} />
+                                            <img src={user.image} style={{width:'2.5rem',height:'2.5rem'}} />
                                           </div>
                                           <div>
-                                            <div style={{fontWeight:'500',fontSize:14}}>{user.firstName}</div>
-                                            <div style={{color:'gray',fontSize:12}}>{comment.body}</div>
+                                            <div style={{fontWeight:'500',fontSize:12}}>{user.firstName}</div>
+                                            <div style={{color:'gray',fontSize:10}}>{comment.body}</div>
                                           </div>
                                         </div>
                                       )

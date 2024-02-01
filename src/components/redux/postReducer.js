@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-const url = 'https://dummyjson.com/posts';
+const url = 'https://dummyjson.com/posts?limit=0';
 
 export const getPosts = createAsyncThunk('posts/getPosts', 
     () => {
@@ -35,6 +35,13 @@ const postReducer = createSlice({
     addPost: (state, action) => {
         state.posts = action.payload
     },
+    likePost: (state, action) => {
+        state.posts.map((post)=> {
+            if (post.id == action.payload) {
+                post.reactions = post.reactions+1
+            }
+        })
+    }
   },
   extraReducers: (builder) => {
     builder.addCase(getPosts.fulfilled , (state,action) => {
@@ -46,5 +53,5 @@ const postReducer = createSlice({
   }
 });
 
-export const {addPost,addMyPost} = postReducer.actions
+export const {addPost,addMyPost,likePost} = postReducer.actions
 export default postReducer.reducer;

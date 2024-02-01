@@ -51,9 +51,9 @@ function Login({ setCurruser }) {
 
       const user = await userResponse.json();
       setCurruser(user); 
-      dispatch(setUserId(user));
-      dispatch(getMyPosts(user.id));
-      navigate(`/home/${user.id}`);
+      dispatch(setUserId(data.id));
+      dispatch(getMyPosts(data.id));
+      navigate(`/home/${data.id}`);
     } catch (error) {
       console.error('Login failed', error);
     }
