@@ -22,10 +22,11 @@ import { MdOutlineMail } from "react-icons/md";
 import { FaPhoneAlt } from "react-icons/fa";
 import { FaBuilding } from "react-icons/fa6";
 import { MdBloodtype } from "react-icons/md";
-import { addMyPost, addPost, likePost } from './redux/postReducer';
+import { addLike, addMyPost, addPost, likePost } from './redux/postReducer';
 import { getPosts } from './redux/postReducer';
 import { IoMdLogOut } from "react-icons/io";
 import { addComment, getComments } from './redux/commentReducer';
+import { addFriend } from './redux/userReducer';
 
 
 
@@ -37,6 +38,8 @@ function Mainpage() {
   const mycomms = useSelector((state) => state.comments.mycomments);
   const myposts = useSelector((state) => state.posts.myposts);
   const comments = comms.concat(mycomms);
+  const like = useSelector((state) => state.posts.like);
+  const friends = useSelector((state) => state.user.friends);
   console.log(userid);
   // const {userid} = useParams();
   const navigate = useNavigate();
@@ -48,14 +51,14 @@ function Mainpage() {
   // const [comments,setComments] = useState([]);
   const [postid,setPostid] = useState(false);
   const [postno,setPostno] = useState(null);
-  const [like,setLike] = useState([]);
+  // const [like,setLike] = useState([]);
   const [present,setPresent] = useState(false)
   const [title,setTitle] =useState("")
   const [body,setBody] =useState("")
   const [tags,setTags] =useState([])
   const [newcom,setNewcom] =useState("")
   const [newc,setNewc] = useState(false)
-  const [friends,setFriends]=useState([])
+  // const [friends,setFriends]=useState([])
   const suggestions = users.slice(2,8)
   const [showside,setShowside] = useState(false)
   const [showmypost, setShowmypost] =useState(false)
@@ -111,7 +114,7 @@ function Mainpage() {
   const likePostfunc = (id) => {
     if(like.includes(id)==false){
       dispatch(likePost(id))
-      like.push(id)
+      dispatch(addLike(id))
     }
   }
 
@@ -132,9 +135,7 @@ function Mainpage() {
   }
 
   const updateFriends = (id) => {
-    console.log(id)
-    const newfriends = friends.concat(id)
-    setFriends(newfriends)
+    dispatch(addFriend(id))
   }
 
   const openProfile = (id) => {
@@ -277,7 +278,7 @@ function Mainpage() {
                   <div>
                   <img src={user.image} style={{width:'2.5rem',height:'2.5rem'}} />
                   </div>
-                  <div>
+                  <div style={{display:'flex',flexDirection:'column',alignItems:'flex-start'}}>
                     <Link className='suggname' to={`/profile/${user.id}`} style={{fontWeight:'400',fontSize:12,color:'black'}}>
                       {user.firstName} {user.lastName}
                     </Link>

@@ -118,12 +118,13 @@
 
 .add-post {
   background-color: #EEF1FF;
-  border-radius: 20px;
+  border-radius: 10px;
   width: 100%;
   display: flex;
   padding: 20px;
   justify-content: flex-start;
-  gap: 20px; 
+  gap: 20px;
+  position: relative;
 }
 
 .text-containers {
@@ -183,7 +184,7 @@ input[type="text"]:active{
 }
 
 body{
-  background-image: linear-gradient(92deg, #a6c0fe 0%, #f68084 100%);
+  background-image: linear-gradient(90deg, #a6c0fe 0%, #f68084 100%);
 }
 
 /* body{

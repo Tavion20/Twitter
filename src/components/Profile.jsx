@@ -10,7 +10,7 @@ import Select from 'react-select'
 import { GiBirdTwitter } from "react-icons/gi";
 import { IoMdSearch } from "react-icons/io";
 import { FaTwitter } from "react-icons/fa";
-import { BsSendFill } from "react-icons/bs";
+import { BsSendFill ,BsPersonWorkspace } from "react-icons/bs";
 import { Link,useNavigate } from "react-router-dom";
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
@@ -22,9 +22,11 @@ import { FaPhoneAlt } from "react-icons/fa";
 import { FaBuilding } from "react-icons/fa6";
 import { MdBloodtype } from "react-icons/md";
 import { IoMdLogOut } from "react-icons/io";
-import { addMyPost, addPost, likePost } from './redux/postReducer';
+import { addMyPost, addPost, likePost ,addLike} from './redux/postReducer';
 import { getPosts } from './redux/postReducer';
 import { addComment, getComments } from './redux/commentReducer';
+import wppr1 from '../assets/wppr1.png'
+import wppr2 from '../assets/wppr2.jpg'
 
 
 function Profile({ match }) {
@@ -36,6 +38,8 @@ function Profile({ match }) {
   const comms = useSelector((state) => state.comments.comments);
   const mycomms = useSelector((state) => state.comments.mycomments);
   const myposts = useSelector((state) => state.posts.myposts);
+  const like = useSelector((state) => state.posts.like);
+
   const comments = comms.concat(mycomms);
   const navigate = useNavigate();
   const [users,setUsers] = useState([]);
@@ -46,7 +50,7 @@ function Profile({ match }) {
   // const [comments,setComments] = useState([]);
   const [postid,setPostid] = useState(false);
   const [postno,setPostno] = useState(null);
-  const [like,setLike] = useState(0);
+  // const [like,setLike] = useState(0);
   const [title,setTitle] =useState("")
   const [body,setBody] =useState("")
   const [tags,setTags] =useState([])
@@ -109,7 +113,7 @@ function Profile({ match }) {
   const likePostfunc = (id) => {
     if(like.includes(id)==false){
       dispatch(likePost(id))
-      like.push(id)
+      dispatch(addLike(id))
     }
   }
 
@@ -279,54 +283,57 @@ function Profile({ match }) {
 
 
         <div style={{flex:0.5,paddingTop:'3rem',marginLeft:'2rem'}}>
+        
           <div className="add-post">
-              {users.map((curruser) => {
+          <div style={{position:'absolute',top:1,left:1,right:1,height:'7rem'}}><img src={wppr1} style={{width:'100%',height:'100%',objectFit:'cover',borderTopLeftRadius:10,borderTopRightRadius:10}} /></div>
+              <div style={{marginTop:'7rem'}}>{users.map((curruser) => {
                 if(curruser.id == curruserid){return(
                     <div>
-                        <div style={{display:'flex',columnGap:'1rem'}}>
-                            <div>
+                        <div style={{display:'flex',columnGap:'1rem',position:'absolute',top:'4.5rem',left:'2rem'}}>
+                            <div style={{backgroundColor:'#a6c0fe',padding:'0.6rem',borderRadius:10,border:'5px solid #EEF1FF'}}>
                                 <img src={curruser.image} style={{width:'3.5rem',height:'3.5rem'}} />
                             </div>
                             <div>
-                                <div>{curruser.firstName} {curruser.lastName}</div>
-                                <div style={{fontSize:14,fontWeight:600}}>@{curruser.username}</div>
-                            </div>
-                        </div>
-                        <div style={{display:'flex',columnGap:'1.8rem',marginTop:'2rem',paddingLeft:'1rem'}}>
-                            <div style={{display:'flex',columnGap:'0.7rem',justifyContent:'center',alignItems:'center'}}>
-                                <FaLocationDot />
-                                <div>{curruser.address.city}</div>
-                            </div>
-                            <div style={{display:'flex',columnGap:'0.7rem',justifyContent:'center',alignItems:'center'}}>
+                                <div style={{fontSize:16,fontWeight:500,color:'white'}}>{curruser.firstName} {curruser.lastName}</div>
+                                <div style={{fontSize:14,fontWeight:400,color:'white'}}>@{curruser.username}</div>
+                                <div style={{display:'flex',columnGap:'0.7rem',justifyContent:'center',alignItems:'center',marginTop:'1rem'}}>
                                 <MdOutlineMail />
                                 <div>{curruser.email}</div>
                             </div>
+                            </div>
                         </div>
-                        <div style={{display:'flex',columnGap:'1.8rem',marginTop:'1rem',paddingLeft:'1rem'}}>
-                        <div style={{display:'flex',columnGap:'0.7rem',justifyContent:'center',alignItems:'center'}}>
+                        <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',columnGap:'1.8rem',rowGap:'0.5rem',marginTop:'2rem',paddingLeft:'1rem'}}>
+                            <div style={{display:'flex',columnGap:'0.7rem',justifyContent:'flex-start'}}>
+                                <FaLocationDot />
+                                <div>{curruser.address.city}</div>
+                            </div>
+                            <div style={{display:'flex',columnGap:'0.7rem'}}>
+                                <BsPersonWorkspace  />
+                                <div>{curruser.company.title}</div>
+                            </div>
+                            <div style={{display:'flex',columnGap:'0.7rem'}}>
                                 <FaBabyCarriage />
                                 <div>{curruser.birthDate}</div>
                             </div>
-                            
-                            <div style={{display:'flex',columnGap:'0.7rem',justifyContent:'center',alignItems:'center'}}>
+                            <div style={{display:'flex',columnGap:'0.7rem'}}>
                                 <FaPhoneAlt />
                                 <div>{curruser.phone}</div>
                             </div>
-                        </div>
-                        <div style={{display:'flex',columnGap:'5rem',marginTop:'1rem',paddingLeft:'1rem'}}>
-                        <div style={{display:'flex',columnGap:'0.7rem',justifyContent:'center',alignItems:'center'}}>
+                            <div style={{display:'flex',columnGap:'0.7rem'}}>
                                 <MdBloodtype />
                                 <div>{curruser.bloodGroup}</div>
                             </div>
-                            
-                            <div style={{display:'flex',columnGap:'0.7rem',justifyContent:'center',alignItems:'center'}}>
+                            <div style={{display:'flex',columnGap:'0.7rem'}}>
                                 <FaBuilding />
                                 <div>{curruser.company.name}</div>
                             </div>
+                            
                         </div>
+                        
                     </div>
                 )}
               })}
+              </div>
           </div>
           <div style={{marginTop:'3rem'}}>
             <div style={{display:'flex',alignItems:'center',columnGap:'1.5rem',marginBottom:'1.5rem'}}>

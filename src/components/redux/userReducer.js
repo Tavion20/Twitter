@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   userID: null,
   viewID: null,
+  friends: []
 };
 
 const userReducer = createSlice({
@@ -14,9 +15,12 @@ const userReducer = createSlice({
     setViewId : (state,action) => {
       state.viewID = action.payload
     },
+    addFriend: (state, action) => {
+      state.friends = state.friends.concat(action.payload)
+    },
   },
 });
 
-export const {setUserId,setViewId} = userReducer.actions
+export const {setUserId,setViewId,addFriend} = userReducer.actions
 
 export default userReducer.reducer;

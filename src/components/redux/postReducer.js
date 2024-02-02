@@ -23,6 +23,7 @@ export const getMyPosts = createAsyncThunk('posts/getMyPosts',
 const initialState = {
   myposts : [],
   posts : [],
+  like: []
 };
 
 const postReducer = createSlice({
@@ -34,6 +35,9 @@ const postReducer = createSlice({
     },
     addPost: (state, action) => {
         state.posts = action.payload
+    },
+    addLike: (state, action) => {
+        state.like = state.like.concat(action.payload)
     },
     likePost: (state, action) => {
         state.posts.map((post)=> {
@@ -53,5 +57,5 @@ const postReducer = createSlice({
   }
 });
 
-export const {addPost,addMyPost,likePost} = postReducer.actions
+export const {addPost,addMyPost,likePost,addLike} = postReducer.actions
 export default postReducer.reducer;
