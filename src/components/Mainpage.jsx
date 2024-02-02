@@ -31,8 +31,8 @@ import { addFriend } from './redux/userReducer';
 
 
 function Mainpage() {
-  // const userid = useSelector((state) => state.user.userID);
-  const userid = 1
+  const userid = useSelector((state) => state.user.userID);
+  // const userid = 1
   const posts = useSelector((state) => state.posts.posts);
   const comms = useSelector((state) => state.comments.comments);
   const mycomms = useSelector((state) => state.comments.mycomments);
