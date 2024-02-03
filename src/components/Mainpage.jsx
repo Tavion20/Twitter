@@ -26,7 +26,7 @@ import { addLike, addMyPost, addPost, likePost } from './redux/postReducer';
 import { getPosts } from './redux/postReducer';
 import { IoMdLogOut } from "react-icons/io";
 import { addComment, getComments } from './redux/commentReducer';
-import { addFriend } from './redux/userReducer';
+import { addFriend, setToken } from './redux/userReducer';
 
 
 
@@ -111,6 +111,10 @@ function Mainpage() {
   //     console.error('Error fetching comments:', error);
   //   }
   // }
+  const logout = () => {
+    dispatch(setToken(false));
+    navigate('/');
+  }
 
   const likePostfunc = (id) => {
     if(like.includes(id)==false){
@@ -229,7 +233,7 @@ function Mainpage() {
             </div>
           </div>
           <div style={{marginLeft:'auto'}}>
-            <button onClick={() => navigate('/')} style={{padding:'0.75rem',backgroundColor:'#EEF1FF',border:'none',borderRadius:20,cursor:'pointer'}}><IoMdLogOut /></button>
+            <button onClick={() => logout()} style={{padding:'0.75rem',backgroundColor:'#EEF1FF',border:'none',borderRadius:20,cursor:'pointer'}}><IoMdLogOut /></button>
           </div>
         </div>
         {/* <div style={{display:'flex',justifyContent:'center'}}>

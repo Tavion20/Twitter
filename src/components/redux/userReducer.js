@@ -3,7 +3,8 @@ const initialState = {
   userID: null,
   viewID: null,
   friends: [],
-  token: false
+  token: null,
+  invalid: false
 };
 
 const userReducer = createSlice({
@@ -19,11 +20,17 @@ const userReducer = createSlice({
     addFriend: (state, action) => {
       state.friends = state.friends.concat(action.payload)
     },
+    setToken: (state, action) => {
+      state.token = null
+    }
   },
   extraReducers: (builder) => {
     builder.addCase(authentication.fulfilled , (state,action) => {
         state.userID = action.payload.id;
-        state.token = true;
+        state.token = action.payload.token;
+        if(state.token==null){
+          state.invalid=true
+        }
     });
   }
 });
@@ -56,6 +63,6 @@ export const authentication = createAsyncThunk('user/authentication',
     }
 );
 
-export const {setUserId,setViewId,addFriend} = userReducer.actions
+export const {setUserId,setViewId,addFriend,setToken} = userReducer.actions
 
 export default userReducer.reducer;

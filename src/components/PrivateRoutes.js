@@ -15,11 +15,11 @@ const PrivateRoutes = ({ props }) => {
     }, []);
   
     return (
-        token ? <Mainpage /> :
+        token!=null ? <Mainpage /> :
       isLoading ? (
         <div style={{display:'flex',width:'100%',height:'100%',justifyContent:'center',alignItems:'center'}}><LoadingSpinner /></div>
       ) : (
-        token ? (
+        token!=null ? (
           <Mainpage />
         ) : (
           <Navigate to="/" replace />

@@ -7,6 +7,7 @@ import { getMyPosts } from './redux/postReducer';
 
 function Login({ setCurruser }) {
   const userid = useSelector((state) => state.user.userID);
+  const invalid = useSelector((state) => state.user.invalid);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [username, setUsername] = useState('');
@@ -64,7 +65,8 @@ function Login({ setCurruser }) {
             <input value={username} onChange={(e) => setUsername(e.target.value)} type="text" placeholder="Username" name="username" required />
             <input value={password} onChange={(e) => setPassword(e.target.value)} type="password" placeholder="Password" name="password" required />
             <a href="#">Forgot Password?</a>
-            <br />
+            
+            {invalid && <div style={{color:'red'}}>Invalid Credentials!</div>}
             <button type="button" onClick={handleLogin}>Sign In</button>
             {loginStatus && <p style={{ color: 'red' }}>{loginStatus}</p>}
           </form>
