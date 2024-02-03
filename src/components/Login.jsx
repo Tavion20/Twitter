@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import '../App.css';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { setUserId } from './redux/userReducer';
+import { useDispatch,useSelector } from 'react-redux';
+import { authentication, setUserId } from './redux/userReducer';
 import { getMyPosts } from './redux/postReducer';
 
 function Login({ setCurruser }) {
+  const userid = useSelector((state) => state.user.userID);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [username, setUsername] = useState('');
@@ -13,50 +14,45 @@ function Login({ setCurruser }) {
   const [loginStatus, setLoginStatus] = useState(null);
 
   const handleLogin = async () => {
-    try {
-      const response = await fetch('https://dummyjson.com/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          username,
-          password,
-        }),
-      });
-
-      if (!response.ok) {
-        setLoginStatus('Invalid credentials. Please try again.');
-        throw new Error('Login failed');
-      }
-
-      const data = await response.json();
-      const token = data.token;
-
-      localStorage.setItem('token', token);
-
-      console.log('Login successful');
-      console.log('Token:', token);
-
-      
-      const userResponse = await fetch('https://dummyjson.com/users', {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      if (!userResponse.ok) {
-        throw new Error('Failed to fetch user details');
-      }
-
-      const user = await userResponse.json();
-      setCurruser(user); 
-      dispatch(setUserId(data.id));
-      dispatch(getMyPosts(data.id));
-      navigate(`/home/${data.id}`);
-    } catch (error) {
-      console.error('Login failed', error);
+    console.log(username)
+    console.log(password)
+    const credentials = {
+      username:username,
+      password:password
     }
+
+    dispatch(authentication(credentials))
+    navigate(`/home/${userid}`);
+    // try {
+    //   const response = await fetch('https://dummyjson.com/auth/login', {
+    //     method: 'POST',
+    //     headers: {
+    //       'Content-Type': 'application/json',
+    //     },
+    //     body: JSON.stringify({
+    //       username,
+    //       password,
+    //     }),
+    //   });
+
+    //   const data = await response.json();
+    //   const token = data.token;
+
+    //   localStorage.setItem('token', token);
+    //   const userResponse = await fetch('https://dummyjson.com/users', {
+    //     headers: {
+    //       Authorization: `Bearer ${token}`,
+    //     },
+    //   });
+
+    //   const user = await userResponse.json();
+    //   setCurruser(user); 
+    //   dispatch(setUserId(data.id));
+    //   dispatch(getMyPosts(data.id));
+    //   navigate(`/home/${data.id}`);
+    // } catch (error) {
+    //   console.error('Login failed', error);
+    // }
   };
 
   return (
