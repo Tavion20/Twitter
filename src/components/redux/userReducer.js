@@ -31,6 +31,9 @@ const userReducer = createSlice({
         if(state.token==null){
           state.invalid=true
         }
+        else if(state.invalid==true && state.token!=null){
+          state.invalid=false
+        }
     });
   }
 });
