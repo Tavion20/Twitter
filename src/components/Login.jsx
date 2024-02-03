@@ -22,7 +22,7 @@ function Login({ setCurruser }) {
     }
 
     dispatch(authentication(credentials))
-    navigate(`/home/${userid}`);
+    navigate('/home/');
     // try {
     //   const response = await fetch('https://dummyjson.com/auth/login', {
     //     method: 'POST',
