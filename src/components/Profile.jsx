@@ -188,13 +188,12 @@ function Profile({ match }) {
   ]
 
   const newData = posts
-  .map((post) => {
-    if (search === "" || post.title.toLowerCase().includes(search.toLowerCase()) ) {
+  .filter((post) => {
+    if (search === "" || post.title.toLowerCase().includes(search.toLowerCase()) || post.tags.some((tag) => tag.includes(search)) ) {
       return post;
     }
     return null;
   })
-  .filter(Boolean);
 
 
   return (

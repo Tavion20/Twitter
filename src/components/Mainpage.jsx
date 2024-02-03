@@ -64,6 +64,7 @@ function Mainpage() {
   const [showmypost, setShowmypost] =useState(false)
   const [showaddpost, setShowaddpost] =useState(false)
   const [search, setSearch] = useState("");
+  const [filters,setFilters] = useState(["history"]);
 
   useEffect(() => {
     fetch('https://dummyjson.com/users')
@@ -194,14 +195,12 @@ function Mainpage() {
   ]
 
   const newData = posts
-  .map((post) => {
-    if (search === "" || post.title.toLowerCase().includes(search.toLowerCase()) ) {
+  .filter((post) => {
+    if (search === "" || post.title.toLowerCase().includes(search.toLowerCase()) || post.tags.some((tag) => tag.includes(search)) ) {
       return post;
     }
     return null;
   })
-  .filter(Boolean);
-
 
   return (
     
