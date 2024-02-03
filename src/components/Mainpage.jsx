@@ -252,9 +252,9 @@ function Mainpage() {
                 </div>
               </div>
               <div style={{position:'absolute', top:'2rem',left:'7.5rem'}} >
-                <div style={{color:'white',fontSize:18}}>
+                <Link to={`/profile/${curruser.id}`} style={{color:'white',fontSize:18}}>
                   {curruser.firstName} {curruser.lastName}
-                </div>
+                </Link>
                 <div style={{color:'#EEF1FF',fontSize:12,display:'flex'}}>@{curruser.username}</div>
               </div>
               <div class = "followers-following">
